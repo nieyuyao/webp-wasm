@@ -1,0 +1,6 @@
+.DS_Store
+.vscode
+*.wasm
+webp-*.js
+webp-*.mjs
+dist/
