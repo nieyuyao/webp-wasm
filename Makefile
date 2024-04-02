@@ -4,7 +4,7 @@ WASM_OUT_DIR = dist
 
 .PHONY: clean
 
-webp-wasm.js: webp.o ${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a
+webp-wasm.js: webp.o decode.o encode.o version.o ${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a
 	emcc \
 		-lembind \
 		-s EXPORT_ES6=1 \
@@ -13,7 +13,34 @@ webp-wasm.js: webp.o ${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a
 		$+ \
 		-v
 
-webp.o: src/webp.cpp
+webp.o: src/webp.cpp src/encode.cpp src/decode.cpp src/version.cpp
+	em++ -c \
+	-std=c++17 \
+	-I libwebp \
+	-I emsdk/upstream/emscripten/cache/sysroot/include \
+	-o $@ \
+	-v \
+	$<
+
+encode.o: src/encode.cpp
+	em++ -c \
+	-std=c++17 \
+	-I libwebp \
+	-I emsdk/upstream/emscripten/cache/sysroot/include \
+	-o $@ \
+	-v \
+	$<
+
+decode.o: src/decode.cpp
+	em++ -c \
+	-std=c++17 \
+	-I libwebp \
+	-I emsdk/upstream/emscripten/cache/sysroot/include \
+	-o $@ \
+	-v \
+	$<
+
+version.o: src/version.cpp
 	em++ -c \
 	-std=c++17 \
 	-I libwebp \
