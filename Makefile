@@ -1,5 +1,6 @@
 SRC = src
 CODEC_DIR = libwebp
+WASM_OUT_DIR = dist
 
 .PHONY: clean
 
@@ -7,7 +8,7 @@ webp-wasm.js: webp.o ${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a
 	emcc \
 		-lembind \
 		-s EXPORT_ES6=1 \
-		-o $@ \
+		-o $(WASM_OUT_DIR)/$@ \
 		$+ \
 		-v
 
@@ -24,7 +25,7 @@ ${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a: $(CODEC_DIR)/Makefile
 	$(MAKE) -C $(@D)
 
 $(CODEC_DIR)/Makefile: ${CODEC_DIR}/CMakeLists.txt
-	cmake \
+	emcmake cmake \
 		-DCMAKE_DISABLE_FIND_PACKAGE_Threads=1 \
 		-DWEBP_BUILD_ANIM_UTILS=0 \
 		-DWEBP_BUILD_CWEBP=0 \
@@ -41,4 +42,4 @@ $(CODEC_DIR)/Makefile: ${CODEC_DIR}/CMakeLists.txt
 clean:
 	$(RM) $(CODEC_DIR)/Makefile
 	$(RM) $(CODEC_DIR)/*.a
-	$(RM) ./*.o ./webp-wasm.js ./webp-wasm.wasm
+	$(RM) $(WASM_OUT_DIR)/webp-wasm.js $(WASM_OUT_DIR)/webp-wasm.wasm

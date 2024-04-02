@@ -4,3 +4,6 @@ if [ ! -d "./dist" ]; then
     else
     rm -rf ./dist/*
 fi
+
+# build wasm
+make -C ./

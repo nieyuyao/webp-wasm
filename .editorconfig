@@ -1,14 +1,12 @@
 root = true
 
 [*]
+indent_style = space
 end_of_line = lf
-
-[*.{cpp,makefile}]
 indent_style = tab
 indent_size = 2
 charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
 max_line_length = 120
-semi = false
-singleQuote = true
+
+[Makefile]
+indent_style = tab
