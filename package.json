@@ -2,9 +2,9 @@
   "name": "webp-wasm",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/webp-wasm.js",
   "scripts": {
-    "dev": "vite example",
+    "dev": "vite example --force",
     "build": "bash ./build.sh"
   },
   "author": "nieyuyao",

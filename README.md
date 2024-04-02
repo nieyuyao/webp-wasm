@@ -1,3 +1,9 @@
+#### Example
+
+```shell
+npm run dev
+```
+
 #### Building
 
 ```shell

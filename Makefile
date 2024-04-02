@@ -8,6 +8,7 @@ webp-wasm.js: webp.o ${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a
 	emcc \
 		-lembind \
 		-s EXPORT_ES6=1 \
+		-s ALLOW_MEMORY_GROWTH=1 \
 		-o $(WASM_OUT_DIR)/$@ \
 		$+ \
 		-v

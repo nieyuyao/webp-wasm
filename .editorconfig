@@ -10,3 +10,6 @@ max_line_length = 120
 
 [Makefile]
 indent_style = tab
+
+[vue]
+quote_type = single
