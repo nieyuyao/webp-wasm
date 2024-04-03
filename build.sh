@@ -1,9 +1,12 @@
 # create ./dist directory
-if [ ! -d "./dist" ]; then
-    mkdir ./dist
+if [ ! -d "./wasm" ]; then
+    mkdir ./wasm
     else
-    rm -rf ./dist/*
+    make -C ./ clean
 fi
 
 # build wasm
 make -C ./
+
+# copy ./wasm to ./dist/wasm
+cp -r ./wasm/ ./dist/wasm/

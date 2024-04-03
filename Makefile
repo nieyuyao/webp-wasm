@@ -1,6 +1,6 @@
-SRC = src
+SRC = webp
 CODEC_DIR = libwebp
-WASM_OUT_DIR = dist
+WASM_OUT_DIR = wasm
 EMSDK_INCLUDE_DIR = emsdk/upstream/emscripten/cache/sysroot/include
 
 .PHONY: clean
@@ -14,7 +14,7 @@ webp-wasm.js: webp.o decode.o encode.o version.o ${CODEC_DIR}/libwebp.a ${CODEC_
 		$+ \
 		-v
 
-%.o: src/%.cpp
+%.o: ${SRC}/%.cpp
 	em++ -c \
 	-std=c++17 \
 	-I ${CODEC_DIR} \

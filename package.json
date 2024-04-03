@@ -2,16 +2,20 @@
   "name": "webp-wasm",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/webp-wasm.js",
+  "main": "dist/esm/index.js",
+	"types": "dist/index.d.ts",
   "scripts": {
     "dev": "vite example --force",
-    "build": "bash ./build.sh"
+    "build-wasm": "bash ./build.sh",
+    "build:esm": "tsc -m ES6 --outDir ./dist/esm && cp -r src/*.d.ts dist/ && npm run build-wasm",
+    "build:cjs": "tsc -m commonjs --outDir ./dist/cjs && cp -r src/*.d.ts dist/ && npm run build-wasm"
   },
   "author": "nieyuyao",
   "license": "MIT",
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
     "jest": "^29.7.0",
+    "typescript": "^5.4.3",
     "vite": "^5.2.7"
   }
 }

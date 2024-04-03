@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import Module from '../dist/webp-wasm'
+import { Webp } from '../dist/esm/index'
 
 const canvasRef = ref(null)
 let isUploaded = false
@@ -31,8 +31,7 @@ const downloadWebp = async () => {
 	const canvas = canvasRef.value
 	const ctx = canvas.getContext('2d')
 	const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-	const module = await Module()
-	const result = module.encodeRGBA(imgData.data, canvas.width, canvas.height, 100)
+	const result = await Webp.encodeRGBA(imgData.data, canvas.width, canvas.height, 100)
 	const blob = new Blob([result], {type: 'image/webp'})
 	const blobURL = URL.createObjectURL(blob);
 	const a = document.createElement('a')
@@ -58,9 +57,8 @@ const drawImage = (img) => {
 }
 
 onMounted(async () => {
-	const module = await Module()
-	console.log('encoder version is', module.encoder_version())
-	console.log('decoder version is', module.decoder_version())
+	console.log('encoder version is', await Webp.encoderVersion())
+	console.log('decoder version is', await Webp.decoderVersion())
 })
 </script>
 

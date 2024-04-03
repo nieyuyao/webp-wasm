@@ -13,13 +13,13 @@ val encoder_version()
 val encodeRGB(std::string rgb, int width, int height, int quality_factor) {
 	uint8_t* output;
 	size_t size = WebPEncodeRGB((uint8_t*)rgb.c_str(), width, height, 3 * width, quality_factor, &output);
-	return val::global("Uint8Array").new_(typed_memory_view(size, output));
+	return Uint8Array.new_(typed_memory_view(size, output));
 }
 
 val encodeRGBA(std::string rgba, int width, int height, int quality_factor) {
 	uint8_t* output;
 	size_t size = WebPEncodeRGBA((uint8_t*)rgba.c_str(), width, height, 4 * width, quality_factor, &output);
-	return val::global("Uint8Array").new_(typed_memory_view(size, output));
+	return Uint8Array.new_(typed_memory_view(size, output));
 }
 
 val encode(std::string data, int width, int height, bool use_alpha, WebPConfig config)
@@ -56,5 +56,5 @@ val encode(std::string data, int width, int height, bool use_alpha, WebPConfig c
 	{
 		return val::null();
 	}
-	return val::global("Uint8Array").new_(typed_memory_view(wrt.size, wrt.mem));
+	return Uint8Array.new_(typed_memory_view(wrt.size, wrt.mem));
 }

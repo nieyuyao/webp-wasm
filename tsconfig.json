@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"strictNullChecks": true,
+    "moduleResolution": "node",
+    "module": "esnext",
+    "lib": ["ES2016", "DOM"],
+    "esModuleInterop": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": false,
+    "target": "es6",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "sourceMap": false,
+		"rootDir": "src/"
+	},
+	"include": ["./src/**/*"]
+}
