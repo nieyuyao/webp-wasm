@@ -1,6 +1,7 @@
 SRC = src
 CODEC_DIR = libwebp
 WASM_OUT_DIR = dist
+EMSDK_INCLUDE_DIR = emsdk/upstream/emscripten/cache/sysroot/include
 
 .PHONY: clean
 
@@ -13,43 +14,16 @@ webp-wasm.js: webp.o decode.o encode.o version.o ${CODEC_DIR}/libwebp.a ${CODEC_
 		$+ \
 		-v
 
-webp.o: src/webp.cpp src/encode.cpp src/decode.cpp src/version.cpp
+%.o: src/%.cpp
 	em++ -c \
 	-std=c++17 \
-	-I libwebp \
-	-I emsdk/upstream/emscripten/cache/sysroot/include \
+	-I ${CODEC_DIR} \
+	-I ${EMSDK_INCLUDE_DIR} \
 	-o $@ \
 	-v \
 	$<
 
-encode.o: src/encode.cpp
-	em++ -c \
-	-std=c++17 \
-	-I libwebp \
-	-I emsdk/upstream/emscripten/cache/sysroot/include \
-	-o $@ \
-	-v \
-	$<
-
-decode.o: src/decode.cpp
-	em++ -c \
-	-std=c++17 \
-	-I libwebp \
-	-I emsdk/upstream/emscripten/cache/sysroot/include \
-	-o $@ \
-	-v \
-	$<
-
-version.o: src/version.cpp
-	em++ -c \
-	-std=c++17 \
-	-I libwebp \
-	-I emsdk/upstream/emscripten/cache/sysroot/include \
-	-o $@ \
-	-v \
-	$<
-
-${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a: $(CODEC_DIR)/Makefile
+%/libwebp.a %/libsharpyuv.a: %/Makefile
 	$(MAKE) -C $(@D)
 
 $(CODEC_DIR)/Makefile: ${CODEC_DIR}/CMakeLists.txt
@@ -70,4 +44,5 @@ $(CODEC_DIR)/Makefile: ${CODEC_DIR}/CMakeLists.txt
 clean:
 	$(RM) $(CODEC_DIR)/Makefile
 	$(RM) $(CODEC_DIR)/*.a
+	$(RM) *.o
 	$(RM) $(WASM_OUT_DIR)/webp-wasm.js $(WASM_OUT_DIR)/webp-wasm.wasm
