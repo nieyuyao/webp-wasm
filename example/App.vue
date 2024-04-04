@@ -1,6 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Webp } from '../dist/esm/index'
+import { webpConfig } from './config'
 
 const canvasRef = ref(null)
 let isUploaded = false

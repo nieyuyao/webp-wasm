@@ -1,6 +1,5 @@
 SRC = webp
 CODEC_DIR = libwebp
-WASM_OUT_DIR = wasm
 EMSDK_INCLUDE_DIR = emsdk/upstream/emscripten/cache/sysroot/include
 
 .PHONY: clean
@@ -8,7 +7,7 @@ EMSDK_INCLUDE_DIR = emsdk/upstream/emscripten/cache/sysroot/include
 webp-wasm.js: webp.o decode.o encode.o version.o ${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a
 	emcc \
 		-lembind \
-		-s EXPORT_ES6=1 \
+		-s EXPORT_ES6=${EXPORT_ES6} \
 		-s ALLOW_MEMORY_GROWTH=1 \
 		-o $(WASM_OUT_DIR)/$@ \
 		$+ \
@@ -45,4 +44,4 @@ clean:
 	$(RM) $(CODEC_DIR)/Makefile
 	$(RM) $(CODEC_DIR)/*.a
 	$(RM) *.o
-	$(RM) $(WASM_OUT_DIR)/webp-wasm.js $(WASM_OUT_DIR)/webp-wasm.wasm
+	$(RM) -rf ${CLEAN_WASM_DIR}

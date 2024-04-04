@@ -1,6 +1,5 @@
-// @ts-nocheck
-
 import type { WebPConfig, Nullable } from './types'
+// @ts-ignore
 import Module from '../wasm/webp-wasm'
 
 // default webp config
@@ -64,13 +63,18 @@ export class Webp {
 		const module = await Module()
 		return module.decoder_version()
 	}
-	static decodeRGB(rgb: Uint8Array, width: number, height: number, quality: number) {
-		// TODO:
+	static async decodeRGB(rgb: Uint8Array, width: number, height: number) {
+		const module = await Module()
+		return module.decodeRGB(rgb, width, height)
 	}
-	static decodeRGBA(rgb: Uint8Array, width: number, height: number, quality: number) {
-		// TODO:
+	static async decodeRGBA(rgba: Uint8Array, width: number, height: number) {
+		const module = await Module()
+		return module.decodeRGBA(rgba, width, height)
 	}
-	static decode(data: Uint8Array, width: number, height: number, config: WebPConfig) {
-		// TODO:
-	}
+	// TODO:
+	// static decode(data: Uint8Array, width: number, height: number, config: WebPConfig) {
+	// 	const module = await Module()
+	// 	quality = Math.min(Math.max(0, quality))
+	// 	return module.decode(rgb, width, height, quality)
+	// }
 }

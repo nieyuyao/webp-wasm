@@ -8,4 +8,4 @@ emscripten::val decodeRGB(std::string data, int width, int height);
 
 emscripten::val decodeRGBA(std::string data, int width, int height);
 
-emscripten::val decode(std::string data, int width, int height, WebPConfig config);
+emscripten::val decode(std::string data, int width, int height, bool has_alpha);
