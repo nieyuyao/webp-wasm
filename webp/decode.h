@@ -4,8 +4,8 @@
 
 emscripten::val decoder_version();
 
-emscripten::val decodeRGB(std::string data, int width, int height);
+emscripten::val decodeRGB(std::string data);
 
-emscripten::val decodeRGBA(std::string data, int width, int height);
+emscripten::val decodeRGBA(std::string data);
 
-emscripten::val decode(std::string data, int width, int height, bool has_alpha);
+emscripten::val decode(std::string data, bool has_alpha);

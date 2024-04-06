@@ -1,7 +1,7 @@
-import { Webp } from '../dist/esm'
+import { decoderVersion } from '../'
 
 describe('decode', () => {
-	test('decodeRGBA', async () => {
-		await expect(Webp.decoderVersion()).resolves.toBe('1.3.2')
+	test('version', async () => {
+		await expect(decoderVersion()).resolves.toBe('1.3.2')
 	})
 })
