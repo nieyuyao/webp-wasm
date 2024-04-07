@@ -17,10 +17,10 @@ export const encodeRGB = async (
 	rgb: Uint8ClampedArray,
 	width: number,
 	height: number,
-	quality: number
+	quality?: number
 ): Promise<Nullable<Uint8ClampedArray>> => {
 	const module = await Module()
-	quality = Math.min(Math.max(0, quality))
+	quality = typeof quality !== 'number' ? 100 : Math.min(Math.max(0, quality))
 	return module.encodeRGB(rgb, width, height, quality)
 }
 
@@ -32,7 +32,7 @@ export const encodeRGBA = async (
 	quality: number
 ): Promise<Nullable<Uint8ClampedArray>> => {
 	const module = await Module()
-	quality = Math.min(Math.max(0, quality))
+	quality = typeof quality !== 'number' ? 100 : Math.min(Math.max(0, quality))
 	return module.encodeRGBA(rgba, width, height, quality)
 }
 
@@ -79,12 +79,12 @@ export const decoderVersion = async (): Promise<string> => {
 	return module.decoder_version()
 }
 
-export const decodeRGB = async (rgb: Uint8ClampedArray): Promise<ImageData> => {
+export const decodeRGB = async (rgb: Uint8ClampedArray): Promise<Nullable<ImageData>> => {
 	const module = await Module()
 	return module.decodeRGB(rgb)
 }
 
-export const decodeRGBA = async (rgba: Uint8ClampedArray): Promise<ImageData> => {
+export const decodeRGBA = async (rgba: Uint8ClampedArray): Promise<Nullable<ImageData>> => {
 	const module = await Module()
 	return module.decodeRGBA(rgba)
 }

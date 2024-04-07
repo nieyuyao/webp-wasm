@@ -26,5 +26,5 @@ export declare const encodeAnimation: (
 	frames: WebPAnimationFrame[]
 ) => Promise<Nullable<Uint8ClampedArray>>
 export declare const decoderVersion: () => Promise<string>
-export declare const decodeRGB: (rgb: Uint8ClampedArray) => Promise<ImageData>
-export declare const decodeRGBA: (rgba: Uint8ClampedArray) => Promise<ImageData>
+export declare const decodeRGB: (rgb: Uint8ClampedArray) => Promise<Nullable<ImageData>>
+export declare const decodeRGBA: (rgba: Uint8ClampedArray) => Promise<Nullable<ImageData>>

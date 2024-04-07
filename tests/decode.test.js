@@ -1,4 +1,4 @@
-import { decoderVersion } from '../'
+import { decoderVersion } from '../dist/esm'
 
 describe('decode', () => {
 	test('version', async () => {

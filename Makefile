@@ -7,7 +7,8 @@ EMSDK_INCLUDE_DIR = emsdk/upstream/emscripten/cache/sysroot/include
 webp-wasm.js: webp.o decode.o encode.o version.o ${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a ${CODEC_DIR}/libsharpyuv.a ${CODEC_DIR}/libwebpmux.a
 	emcc \
 		-lembind \
-		-s EXPORT_ES6=${EXPORT_ES6} \
+		-s EXPORT_ES6=$(EXPORT_ES6) \
+		-s MODULARIZE \
 		-s ALLOW_MEMORY_GROWTH=1 \
 		-o $(WASM_OUT_DIR)/$@ \
 		$+ \
@@ -42,4 +43,4 @@ clean:
 	$(RM) $(CODEC_DIR)/Makefile
 	$(RM) $(CODEC_DIR)/*.a
 	$(RM) *.o
-	$(RM) -rf ${CLEAN_WASM_DIR}
+	$(RM) -rf $(CLEAN_WASM_DIR)
