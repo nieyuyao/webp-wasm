@@ -1,6 +1,12 @@
+DIST_DIR="./dist"
 WASM_OUT_DIR="./dist/cjs"
 EXPORT_ES6=0
 CLEAN_WASM_DIR=${WASM_OUT_DIR}
+
+if [ ! -d $DIST_DIR ]; then
+  mkdir $DIST_DIR
+fi
+
 
 if [ $1 == "-dev" ]; then
 	WASM_OUT_DIR="./src"

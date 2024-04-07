@@ -3,6 +3,7 @@
 #include "encode.h"
 #include "decode.h"
 
+
 EMSCRIPTEN_BINDINGS(module)
 {
 	emscripten::value_object<SimpleWebPConfig>("SimpleWebPConfig")

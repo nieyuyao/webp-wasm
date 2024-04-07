@@ -1,3 +1,7 @@
+# `webp.wasm`
+
+A webp wasm library based on libwebp.
+
 #### Example
 
 ```shell
