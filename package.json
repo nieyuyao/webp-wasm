@@ -1,5 +1,5 @@
 {
-  "name": "webp-wasm",
+  "name": "webp.wasm",
   "version": "0.0.1",
   "description": "",
   "main": "dist/cjs/index.js",

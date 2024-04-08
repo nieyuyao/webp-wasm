@@ -24,7 +24,7 @@ describe('encode', () => {
 		const source = ctx.getImageData(0, 0, img.width, img.height)
 		const buf = Buffer.alloc(3 * img.width * img.height)
 		let j = 0
-		// no alpha
+		// remove alpha
 		source.data.forEach((pixel, i) => {
 			if ((i + 1) % 4 === 0) {
 				return

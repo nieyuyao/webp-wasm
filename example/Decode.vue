@@ -12,7 +12,6 @@ const onChange = (event) => {
 	}
 	isUploaded = true
 	const file = files[0]
-	console.log(file)
 	const fr = new FileReader()
 	fr.onload = () => {
 		if (!fr.result) {
@@ -33,6 +32,9 @@ const drawWebp = async () => {
 		return
 	}
 	const result = await decodeRGBA(webpData)
+  if (!result) {
+    return
+  }
 	const ctx = canvas.getContext('2d')!
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 	canvas.style.width = `${result.width}px`

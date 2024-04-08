@@ -4,13 +4,13 @@ export declare const encodeRGB: (
 	rgb: Uint8ClampedArray,
 	width: number,
 	height: number,
-	quality: number
+	quality?: number
 ) => Promise<Nullable<Uint8ClampedArray>>
 export declare const encodeRGBA: (
 	rgba: Uint8ClampedArray,
 	width: number,
 	height: number,
-	quality: number
+	quality?: number
 ) => Promise<Nullable<Uint8ClampedArray>>
 export declare const encode: (
 	data: Uint8ClampedArray,

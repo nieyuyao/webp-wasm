@@ -20,7 +20,7 @@ export const encodeRGB = async (
 	quality?: number
 ): Promise<Nullable<Uint8ClampedArray>> => {
 	const module = await Module()
-	quality = typeof quality !== 'number' ? 100 : Math.min(Math.max(0, quality))
+	quality = typeof quality !== 'number' ? 100 : Math.min(100, Math.max(0, quality))
 	return module.encodeRGB(rgb, width, height, quality)
 }
 
@@ -29,10 +29,10 @@ export const encodeRGBA = async (
 	rgba: Uint8ClampedArray,
 	width: number,
 	height: number,
-	quality: number
+	quality?: number
 ): Promise<Nullable<Uint8ClampedArray>> => {
 	const module = await Module()
-	quality = typeof quality !== 'number' ? 100 : Math.min(Math.max(0, quality))
+	quality = typeof quality !== 'number' ? 100 : Math.min(100, Math.max(0, quality))
 	return module.encodeRGBA(rgba, width, height, quality)
 }
 
@@ -49,6 +49,8 @@ export const encode = async (
 		...defaultWebpConfig,
 		...config,
 	}
+  webpConfig.lossless = Math.min(1, Math.max(0, webpConfig.lossless))
+  webpConfig.quality = Math.min(100, Math.max(0, webpConfig.quality))
 	return module.encode(data, width, height, hasAlpha, webpConfig)
 }
 
