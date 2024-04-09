@@ -4,7 +4,7 @@ import { decoderVersion, decodeRGBA } from '../src/'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 let isUploaded = false
-let webpData: Uint8ClampedArray | null = null
+let webpData: Uint8Array | null = null
 const onChange = (event) => {
 	const files = (event.target as HTMLInputElement).files
 	if (!files?.length) {
@@ -17,7 +17,7 @@ const onChange = (event) => {
 		if (!fr.result) {
 			return
 		}
-		webpData = fr.result as Uint8ClampedArray
+		webpData = fr.result as Uint8Array
 	}
 	fr.readAsArrayBuffer(file)
 }
@@ -41,7 +41,7 @@ const drawWebp = async () => {
 	canvas.style.height = `${result.height}px`
 	canvas.width = result.width
 	canvas.height = result.height
-	ctx.putImageData(result, 0, 0)
+	ctx.putImageData(new ImageData(result.data as unknown as Uint8ClampedArray, result.width), 0, 0)
 }
 
 onMounted(async () => {

@@ -9,13 +9,6 @@ struct SimpleWebPConfig
   float quality;   
 };
 
-struct WebPAnimationFrame
-{
-	std::string data;
-	int duration; // ms
-};
-
-
 emscripten::val encoder_version();
 
 emscripten::val encodeRGB(std::string rgb, int width, int height, int quality_factor);

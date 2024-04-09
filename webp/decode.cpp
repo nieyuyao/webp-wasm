@@ -9,17 +9,16 @@ val decoder_version()
 	return get_version(WebPGetDecoderVersion());
 }
 
-thread_local const val ImageData = val::global("ImageData");
-
 val decodeRGB(std::string data) {
 	size_t data_size = data.size();
 	int width;
 	int height;
 	uint8_t* output = WebPDecodeRGB((uint8_t*)data.c_str(), data_size, &width, &height);
-	return ImageData.new_(
-		val::global("Uint8ClampedArray").new_(typed_memory_view(3 * width * height, output)),
-		width
-	);
+  val obj = val::object();
+  obj.set("width", val(width));
+  obj.set("height", val(height));
+  obj.set("data", val::global("Uint8Array").new_(typed_memory_view(3 * width * height, output)));
+	return obj;
 }
 
 val decodeRGBA(std::string data) {
@@ -27,10 +26,11 @@ val decodeRGBA(std::string data) {
 	int width;
 	int height;
 	uint8_t* output = WebPDecodeRGBA((uint8_t*)data.c_str(), data_size, &width, &height);
-	return ImageData.new_(
-		val::global("Uint8ClampedArray").new_(typed_memory_view(4 * width * height, output)),
-		width
-	);
+  val obj = val::object();
+  obj.set("width", width);
+  obj.set("height", height);
+  obj.set("data", val::global("Uint8Array").new_(typed_memory_view(4 * width * height, output)));
+	return obj;
 }
 
 val decode(std::string data, bool has_alpha)
@@ -55,9 +55,10 @@ val decode(std::string data, bool has_alpha)
 		return val::null();
 	}
 	WebPFreeDecBuffer(&config.output);
-	val decoded_data = val::global("Uint8ClampedArray").new_(typed_memory_view(config.output.u.RGBA.size, config.output.u.RGBA.rgba));
-	return ImageData.new_(
-		decoded_data,
-		features.width
-	);
+	val decoded_data = val::global("Uint8Array").new_(typed_memory_view(config.output.u.RGBA.size, config.output.u.RGBA.rgba));
+  val obj = val::object();
+  obj.set("width", features.width);
+  obj.set("height", features.height);
+  obj.set("data", decoded_data);
+	return obj;
 }

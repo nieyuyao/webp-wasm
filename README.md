@@ -27,7 +27,7 @@ console.log(version) // 1.3.2
 
 Encodes rgb bitmap an outputs webp.
 
-`function encodeRGB(rgb: Uint8ClampedArray, width: number, height: number, quality?: number): Promise<Nullable<Uint8ClampedArray>>`
+`function encodeRGB(rgb: Uint8Array, width: number, height: number, quality?: number): Promise<Nullable<Uint8Array>>`
 
 ##### Example
 
@@ -35,7 +35,7 @@ Encodes rgb bitmap an outputs webp.
 ...
 const ctx = canvas.getContext('2d')!
 const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-const buf = new Uint8ClampedArray(3 * canvas.width, canvas.height) 
+const buf = new Uint8Array(3 * canvas.width, canvas.height) 
 let j = 0
 // remove alpha
 imgData.data.forEach((pixel, i) => {
@@ -45,8 +45,8 @@ imgData.data.forEach((pixel, i) => {
   buf[j] = pixel
   j++
 })
-const result = await encodeRGB(buf, canvas.width, canvas.height)
-const blob = new Blob([result!], {type: 'image/webp'})
+const webpData = await encodeRGB(buf, canvas.width, canvas.height)
+const blob = new Blob([webpData!], {type: 'image/webp'})
 const blobURL = URL.createObjectURL(blob);
 // download webp
 const a = document.createElement('a')
@@ -61,7 +61,7 @@ a.remove()
 
 Encodes rgba bitmap an outputs webp.
 
-`function encodeRGBA(rgba: Uint8ClampedArray, width: number, height: number, quality?: number): Promise<Nullable<Uint8ClampedArray>>`
+`function encodeRGBA(rgba: Uint8Array, width: number, height: number, quality?: number): Promise<Nullable<Uint8Array>>`
 
 ##### Example
 
@@ -69,7 +69,7 @@ Encodes rgba bitmap an outputs webp.
 ...
 const ctx = canvas.getContext('2d')!
 const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-const result = await encodeRGBA(imgData.data, canvas.width, canvas.height)
+const webpData = await encodeRGBA(imgData.data, canvas.width, canvas.height)
 // download webp
 ...
 ```
@@ -78,7 +78,7 @@ const result = await encodeRGBA(imgData.data, canvas.width, canvas.height)
 
 A more advanced API is based on the WebPConfig. <b>Only the lossless and quality parameters are supported now !!!</b>.
 
-`function encodeRGBA(data: Uint8ClampedArray, width: number, height: number, hasAlpha: boolean,config: Partial<WebPConfig>): Promise<Nullable<Uint8ClampedArray>>`
+`function encodeRGBA(data: Uint8Array, width: number, height: number, hasAlpha: boolean,config: Partial<WebPConfig>): Promise<Nullable<Uint8Array>>`
 
 - hasAlpha: boolean
 
@@ -98,7 +98,7 @@ Between 0 and 100.
 ...
 const ctx = canvas.getContext('2d')!
 const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-const result = await encode(imgData.data, canvas.width, canvas.height, true, { lossless: 0 })
+const webpData = await encode(imgData.data, canvas.width, canvas.height, true, { lossless: 0 })
 // download webp
 ...
 ```
@@ -107,13 +107,13 @@ const result = await encode(imgData.data, canvas.width, canvas.height, true, { l
 
 Encodes frame data an outputs animated webp.
 
-`function encodeAnimation(width: number, height: number, hasAlpha: boolean, frames: WebPAnimationFrame[]): Promise<Nullable<Uint8ClampedArray>>`
+`function encodeAnimation(width: number, height: number, hasAlpha: boolean, frames: WebPAnimationFrame[]): Promise<Nullable<Uint8Array>>`
 
 - hasAlpha: boolean
 
 Whether to include alpha chanel.
 
-- WebPAnimationFrame.data: Uint8ClampedArray
+- WebPAnimationFrame.data: Uint8Array
 
 Frame data.
 
@@ -130,7 +130,7 @@ frames.push({
   data: ctx.getImageData(0, 0, 100, 100).data,
   duration: 20
 })
-const result = await encodeAnimation(100, 100, true, frames)
+const webpData = await encodeAnimation(100, 100, true, frames)
 ...
 // download webp
 ```
@@ -152,9 +152,9 @@ console.log(version) // 1.3.2
 
 #### decodeRGB
 
-Decodes webp and outputs `ImageData` contains rgb bitmap.
+Decodes webp and outputs `WebPDecodedImageData` contains rgb bitmap.
 
-`function decodeRGB(rgb: Uint8ClampedArray): Promise<Nullable<ImageData>>`
+`function decodeRGB(data: Uint8Array): Promise<Nullable<WebPDecodedImageData>>`
 
 ##### Example
 
@@ -165,7 +165,7 @@ fr.onload = () => {
   if (!fr.result) {
     return
   }
-  webpData = fr.result as Uint8ClampedArray
+  webpData = fr.result as Uint8Array
   const result = await decodeRGB(webpData)
   // draw imageData
   const ctx = canvas.getContext('2d')!
@@ -183,9 +183,9 @@ fr.readAsArrayBuffer(file)
 
 #### decodeRGBA
 
-Decodes webp and outputs `ImageData` contains rgba bitmap.
+Decodes webp and outputs `WebPDecodedImageData` contains rgba bitmap.
 
-`function decodeRGB(rgb: Uint8ClampedArray): Promise<Nullable<ImageData>>`
+`function decodeRGB(data: Uint8Array): Promise<Nullable<WebPDecodedImageData>>`
 
 ##### Example
 
@@ -196,7 +196,7 @@ fr.onload = () => {
   if (!fr.result) {
     return
   }
-  webpData = fr.result as Uint8ClampedArray
+  webpData = fr.result as Uint8Array
   const result = await decodeRGBA(webpData)
   // draw imageData
   ...

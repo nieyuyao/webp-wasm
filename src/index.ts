@@ -1,4 +1,4 @@
-import type { WebPConfig, Nullable, WebPAnimationFrame } from './types'
+import type { WebPConfig, Nullable, WebPAnimationFrame, WebPDecodedImageData } from './types'
 // @ts-ignore
 import Module from './webp-wasm'
 
@@ -14,11 +14,11 @@ export const encoderVersion = async (): Promise<string> => {
 }
 
 export const encodeRGB = async (
-	rgb: Uint8ClampedArray,
+	rgb: Uint8Array,
 	width: number,
 	height: number,
 	quality?: number
-): Promise<Nullable<Uint8ClampedArray>> => {
+): Promise<Nullable<Uint8Array>> => {
 	const module = await Module()
 	quality = typeof quality !== 'number' ? 100 : Math.min(100, Math.max(0, quality))
 	return module.encodeRGB(rgb, width, height, quality)
@@ -26,11 +26,11 @@ export const encodeRGB = async (
 
 
 export const encodeRGBA = async (
-	rgba: Uint8ClampedArray,
+	rgba: Uint8Array,
 	width: number,
 	height: number,
 	quality?: number
-): Promise<Nullable<Uint8ClampedArray>> => {
+): Promise<Nullable<Uint8Array>> => {
 	const module = await Module()
 	quality = typeof quality !== 'number' ? 100 : Math.min(100, Math.max(0, quality))
 	return module.encodeRGBA(rgba, width, height, quality)
@@ -38,12 +38,12 @@ export const encodeRGBA = async (
 
 
 export const encode = async (
-	data: Uint8ClampedArray,
+	data: Uint8Array,
 	width: number,
 	height: number,
 	hasAlpha: boolean,
 	config: Partial<WebPConfig>
-): Promise<Nullable<Uint8ClampedArray>> => {
+): Promise<Nullable<Uint8Array>> => {
 	const module = await Module()
 	const webpConfig = {
 		...defaultWebpConfig,
@@ -59,14 +59,14 @@ export const encodeAnimation = async (
 	height: number,
 	hasAlpha: boolean,
 	frames: WebPAnimationFrame[]
-): Promise<Nullable<Uint8ClampedArray>> => {
+): Promise<Nullable<Uint8Array>> => {
 	const module = await Module()
 	const durations: number[] = []
 	const dataLength = frames.reduce((acc, frame) => {
 		acc += frame.data.length
 		return acc
 	}, 0)
-	const data: Uint8ClampedArray = new Uint8ClampedArray(dataLength)
+	const data: Uint8Array = new Uint8Array(dataLength)
 	let offset = 0
 	frames.forEach(frame => {
 		data.set(frame.data, offset)
@@ -81,18 +81,18 @@ export const decoderVersion = async (): Promise<string> => {
 	return module.decoder_version()
 }
 
-export const decodeRGB = async (rgb: Uint8ClampedArray): Promise<Nullable<ImageData>> => {
+export const decodeRGB = async (data: Uint8Array): Promise<Nullable<WebPDecodedImageData>> => {
 	const module = await Module()
-	return module.decodeRGB(rgb)
+	return module.decodeRGB(data)
 }
 
-export const decodeRGBA = async (rgba: Uint8ClampedArray): Promise<Nullable<ImageData>> => {
+export const decodeRGBA = async (data: Uint8Array): Promise<Nullable<WebPDecodedImageData>> => {
 	const module = await Module()
-	return module.decodeRGBA(rgba)
+	return module.decodeRGBA(data)
 }
 
 // TODO:
-// export const decode = async (data: Uint8ClampedArray, hasAlpha: boolean) => {
+// export const decode = async (data: Uint8Array, hasAlpha: boolean) => {
 // 	const module = await Module()
 // 	return module.decode(data, hasAlpha)
 // }
