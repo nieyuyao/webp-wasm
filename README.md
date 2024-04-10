@@ -25,7 +25,7 @@ console.log(version) // 1.3.2
 
 #### encodeRGB
 
-Encodes rgb bitmap an outputs webp.
+Encodes rgb bitmap an returns WebP Uint8Array. The `width` and `height` parameters of the bitmap should be provided.
 
 `function encodeRGB(rgb: Uint8Array, width: number, height: number, quality?: number): Promise<Nullable<Uint8Array>>`
 
@@ -59,7 +59,7 @@ a.remove()
 
 #### encodeRGBA
 
-Encodes rgba bitmap an outputs webp.
+Encodes rgba bitmap an returns WebP Uint8Array.
 
 `function encodeRGBA(rgba: Uint8Array, width: number, height: number, quality?: number): Promise<Nullable<Uint8Array>>`
 
@@ -76,7 +76,7 @@ const webpData = await encodeRGBA(imgData.data, canvas.width, canvas.height)
 
 #### encode
 
-A more advanced API is based on the WebPConfig. <b>Only the lossless and quality parameters are supported now !!!</b>.
+A more advanced API is based on the WebPConfig. <b>Only the lossless and quality parameters are supported now !!!</b>. You can generate low-quality webp with this function.
 
 `function encodeRGBA(data: Uint8Array, width: number, height: number, hasAlpha: boolean,config: Partial<WebPConfig>): Promise<Nullable<Uint8Array>>`
 
@@ -90,7 +90,7 @@ Lossless encoding (0=lossy(default), 1=lossless).
 
 - WebPConfig.quality: number
 
-Between 0 and 100.
+Between 0 and 100. Default value is 100.
 
 ##### Example
 
@@ -105,7 +105,7 @@ const webpData = await encode(imgData.data, canvas.width, canvas.height, true, {
 
 #### encodeAnimation
 
-Encodes frame data an outputs animated webp.
+Returns animated WebP like `GIF`.
 
 `function encodeAnimation(width: number, height: number, hasAlpha: boolean, frames: WebPAnimationFrame[]): Promise<Nullable<Uint8Array>>`
 
@@ -113,9 +113,11 @@ Encodes frame data an outputs animated webp.
 
 Whether to include alpha chanel.
 
+The WebPAnimationFrame has follow properties:
+
 - WebPAnimationFrame.data: Uint8Array
 
-Frame data.
+Frame bitmap.
 
 - WebPAnimationFrame.duration: number
 
@@ -205,6 +207,24 @@ fr.onload = () => {
 fr.readAsArrayBuffer(file)
 ...
 ```
+
+#### WebPDecodedImageData
+
+The object have the following properties:
+
+- WebPDecodedImageData.width: number
+
+The image width in pixels.
+
+- WebPDecodedImageData.height: number
+
+The image height in pixels.
+
+- WebPDecodedImageData.data: Uint8Array
+
+Raw data in pixels.
+
+> Note: It looks like an `ImageData` object, but it is not. There is actually no `ImageData` in node.
 
 ## Playing Examples
 

@@ -1,6 +1,6 @@
 {
-  "name": "webp.wasm",
-  "version": "0.0.1",
+  "name": "wasm-webp",
+  "version": "0.0.1-beta.1",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -10,9 +10,11 @@
     "webp",
     "wasm",
     "libwebp",
-    "webp-animation",
+    "animation",
     "encode",
-    "decode"
+    "decode",
+    "WebAssembly",
+    "canvas"
   ],
   "files": [
     "dist"
@@ -28,8 +30,7 @@
     "build-wasm:cjs": "bash ./build.sh",
     "build:esm": "npm run build-wasm:esm && tsc -m ES6 --outDir ./dist/esm && cp -r src/*.d.ts dist",
     "build:cjs": "npm run build-wasm:cjs && tsc -m commonjs --outDir ./dist/cjs && cp -r src/*.d.ts dist",
-    "test": "node --experimental-wasm-modules --experimental-vm-modules ./node_modules/jest/bin/jest.js",
-    "publish": ""
+    "test": "node --experimental-wasm-modules --experimental-vm-modules ./node_modules/jest/bin/jest.js"
   },
   "author": "nieyuyao",
   "license": "MIT",
