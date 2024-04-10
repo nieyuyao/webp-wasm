@@ -1,6 +1,6 @@
 {
   "name": "wasm-webp",
-  "version": "0.0.1-beta.1",
+  "version": "0.0.1-beta.2",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -30,7 +30,8 @@
     "build-wasm:cjs": "bash ./build.sh",
     "build:esm": "npm run build-wasm:esm && tsc -m ES6 --outDir ./dist/esm && cp -r src/*.d.ts dist",
     "build:cjs": "npm run build-wasm:cjs && tsc -m commonjs --outDir ./dist/cjs && cp -r src/*.d.ts dist",
-    "test": "node --experimental-wasm-modules --experimental-vm-modules ./node_modules/jest/bin/jest.js"
+    "test": "node --experimental-wasm-modules --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "release": "bash ./release.sh"
   },
   "author": "nieyuyao",
   "license": "MIT",

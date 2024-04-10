@@ -1,6 +1,4 @@
-# WIP
-
-# `webp.wasm`
+# webp.wasm
 
 webp.wasm is a pure Webassembly / Javascript port of libwebp.
 

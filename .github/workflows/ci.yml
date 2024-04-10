@@ -45,11 +45,6 @@ jobs:
       - name: test
         run: npm run test
 
-      - name: echo
-        env:
-            NODE_AUTH_TOKEN: ${{ vars.NPM_TOKEN }}
-        run: echo $NODE_AUTH_TOKEN
-
   release:
     if: ${{ startsWith(github.ref, 'refs/tags') && startsWith(github.ref_name, 'v') }}
     runs-on: ubuntu-latest
@@ -57,6 +52,6 @@ jobs:
     environment: release
     steps:
       - name: release
-        run: npm publish --tag beta
+        run: npm run release
         env:
-          NODE_AUTH_TOKEN: ${{ vars.NPM_PUBLISH_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ vars.NPM_PUBLISH_TOKEN }}
