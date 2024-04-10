@@ -1,21 +1,19 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: CI
+name: Release
 
 on:
   push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
+    tags:
+      - 'v*'
 
 jobs:
-  build:
+  release:
+    if: false
     runs-on: ubuntu-latest
+    environment: release
 
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x, 20.x]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,8 +22,8 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
           cache: 'npm'
+          node-version: 20
 
       - name: install dependencies
         run: npm install
@@ -34,10 +32,12 @@ jobs:
         run: cd emsdk && ./emsdk install latest && ./emsdk activate latest && cd ..
 
       - name: build esm
-        run: npm run build:esm --if-present
+        run: npm run build:esm
 
       - name: build cjs
-        run: npm run build:cjs --if-present
-
-      - name: test
-        run: npm run test
+        run: npm run build:cjs
+      
+      - name: release
+        run: npm run release
+        env:
+          NPM_AUTH_TOKEN: ${{ vars.NPM_TOKEN }}

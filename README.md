@@ -1,8 +1,9 @@
 # webp.wasm
 
-webp.wasm is a pure Webassembly / Javascript port of libwebp.
+webp.wasm is a pure Webassembly / Javascript port of libwebp. The library supports encoding animated webp.
 
 ![CI](https://github.com/nieyuyao/webp-wasm/workflows/CI/badge.svg)
+![latest tag](https://badgen.net/github/release/nieyuyao/webp-wasm)
 
 ## APIs
 
@@ -72,7 +73,7 @@ const webpData = await encodeRGBA(imgData.data, canvas.width, canvas.height)
 ...
 ```
 
-#### encode
+ #### encode
 
 A more advanced API is based on the WebPConfig. <b>Only the lossless and quality parameters are supported now !!!</b>. You can generate low-quality webp with this function.
 
@@ -222,7 +223,7 @@ The image height in pixels.
 
 Raw data in pixels.
 
-> Note: It looks like an `ImageData` object, but it is not. There is actually no `ImageData` in node.
+> Note: It has same properties as browser `ImageData` object, but it is not. There is actually no `ImageData` in node.
 
 ## Playing Examples
 
