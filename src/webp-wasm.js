@@ -148,13 +148,6 @@ readAsync = (filename, onload, onerror, binary = true) => {
 
   // MODULARIZE will export the module in the proper place outside, we don't need to export here
 
-  process.on('uncaughtException', (ex) => {
-    // suppress ExitStatus exceptions from showing an error
-    if (ex !== 'unwind' && !(ex instanceof ExitStatus) && !(ex.context instanceof ExitStatus)) {
-      throw ex;
-    }
-  });
-
   quit_ = (status, toThrow) => {
     process.exitCode = status;
     throw toThrow;
@@ -2579,14 +2572,12 @@ function dbg(...args) {
       return Emval.toHandle(handle[key]);
     };
 
-  var __emval_incref = (handle) => {
-      if (handle > 9) {
-        emval_handles[handle + 1] += 1;
-      }
-    };
+  var __emval_new_array = () => Emval.toHandle([]);
 
   
   var __emval_new_cstring = (v) => Emval.toHandle(getStringOrSymbol(v));
+
+  var __emval_new_object = () => Emval.toHandle({});
 
   
   var __emval_new_u8string = (v) => Emval.toHandle(UTF8ToString(v));
@@ -2597,6 +2588,13 @@ function dbg(...args) {
       var destructors = Emval.toValue(handle);
       runDestructors(destructors);
       __emval_decref(handle);
+    };
+
+  var __emval_set_property = (handle, key, value) => {
+      handle = Emval.toValue(handle);
+      key = Emval.toValue(key);
+      value = Emval.toValue(value);
+      handle[key] = value;
     };
 
   
@@ -2806,13 +2804,17 @@ var wasmImports = {
   /** @export */
   _emval_get_property: __emval_get_property,
   /** @export */
-  _emval_incref: __emval_incref,
+  _emval_new_array: __emval_new_array,
   /** @export */
   _emval_new_cstring: __emval_new_cstring,
+  /** @export */
+  _emval_new_object: __emval_new_object,
   /** @export */
   _emval_new_u8string: __emval_new_u8string,
   /** @export */
   _emval_run_destructors: __emval_run_destructors,
+  /** @export */
+  _emval_set_property: __emval_set_property,
   /** @export */
   _emval_take_value: __emval_take_value,
   /** @export */

@@ -22,6 +22,11 @@ const routesArray: Array<RouteRecordRaw> = [
 		name: 'Decode',
 		component: () => import('./Decode.vue')
 	},
+  {
+		path: '/decode-animation',
+		name: 'DecodeAnimation',
+		component: () => import('./DecodeAnimation.vue')
+	},
 ]
 
 

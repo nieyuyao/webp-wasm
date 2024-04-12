@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import url from 'url'
 import { createCanvas, Image } from '@napi-rs/canvas'
-import { decoderVersion, decodeRGBA, decodeRGB } from '../dist/esm'
+import { decoderVersion, decodeRGBA, decodeRGB, decodeAnimation } from '../dist/esm'
 import { matchBuffer } from './utils'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
@@ -53,5 +53,13 @@ describe('decode', () => {
     expect(
 			matchBuffer(decoded.data, target.data)
 		).toBeTruthy()
+  })
+
+  test('decodeAnimation', async () => {
+    const webpData = fs.readFileSync(path.resolve(__dirname, './imgs/cube.webp'))
+    const frames = await decodeAnimation(webpData, true)
+    expect(frames.length).toBe(100)
+    expect(frames[0].width).toBe(300)
+    expect(frames[0].height).toBe(225)
   })
 })

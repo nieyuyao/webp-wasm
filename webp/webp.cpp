@@ -20,4 +20,5 @@ EMSCRIPTEN_BINDINGS(module)
 	function("decodeRGB", &decodeRGB);
 	function("decodeRGBA", &decodeRGBA);
 	function("decode", &decode);
+  function("decodeAnimation", &decodeAnimation);
 }

@@ -4,7 +4,7 @@ EMSDK_INCLUDE_DIR = emsdk/upstream/emscripten/cache/sysroot/include
 
 .PHONY: clean
 
-webp-wasm.js: webp.o decode.o encode.o version.o ${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a ${CODEC_DIR}/libsharpyuv.a ${CODEC_DIR}/libwebpmux.a
+webp-wasm.js: webp.o decode.o encode.o version.o ${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a ${CODEC_DIR}/libwebpmux.a ${CODEC_DIR}/libwebpdemux.a
 	emsdk/upstream/emscripten/emcc \
 		-lembind \
 		-s EXPORT_ES6=$(EXPORT_ES6) \
@@ -23,19 +23,19 @@ webp-wasm.js: webp.o decode.o encode.o version.o ${CODEC_DIR}/libwebp.a ${CODEC_
 	-v \
 	$<
 
-%/libwebp.a %/libsharpyuv.a %/libwebpmux.a: %/Makefile
+%/libwebp.a %/libsharpyuv.a %/libwebpmux.a %/libwebpdemux.a: %/Makefile
 	$(MAKE) -C $(@D)
 
 $(CODEC_DIR)/Makefile: ${CODEC_DIR}/CMakeLists.txt
 	emsdk/upstream/emscripten/emcmake cmake \
 		-DCMAKE_DISABLE_FIND_PACKAGE_Threads=1 \
-		-DWEBP_BUILD_CWEBP=0 \
-		-DWEBP_BUILD_DWEBP=0 \
+		-DWEBP_BUILD_CWEBP=ON \
+		-DWEBP_BUILD_DWEBP=ON \
 		-DWEBP_BUILD_GIF2WEBP=0 \
 		-DWEBP_BUILD_IMG2WEBP=0 \
 		-DWEBP_BUILD_VWEBP=0 \
-		-DWEBP_BUILD_WEBPINFO=0 \
 		-DWEBP_BUILD_EXTRAS=0 \
+		-DWEBP_BUILD_WEBPINFO=0 \
 		-B $(@D) \
 		$(<D)
 

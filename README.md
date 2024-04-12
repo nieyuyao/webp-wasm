@@ -1,6 +1,6 @@
 # webp.wasm
 
-webp.wasm is a pure Webassembly / Javascript port of libwebp. The library supports encoding animated webp.
+webp.wasm is a pure Webassembly / Javascript port of libwebp. The library supports encoding animated WebP.
 
 ![CI](https://github.com/nieyuyao/webp-wasm/workflows/CI/badge.svg)
 ![latest tag](https://badgen.net/github/release/nieyuyao/webp-wasm)
@@ -175,7 +175,7 @@ fr.onload = () => {
 	canvas.style.height = `${result.height}px`
 	canvas.width = result.width
 	canvas.height = result.height
-	ctx.putImageData(result, 0, 0)
+	ctx.putImageData(new ImageData(new Uint8ClampedArray(result.data)), 0, 0)
 }
 // read webp file
 fr.readAsArrayBuffer(file)
@@ -207,19 +207,64 @@ fr.readAsArrayBuffer(file)
 ...
 ```
 
+#### decodeAnimation
+
+Decoding animated WebP image. Returns an array of frames.
+
+`function decodeAnimation(data: Uint8Array, hasAlpha: boolean): Promise<Nullable<DecodedWebPAnimationFrame[]>>`
+
+##### Example
+
+```javascript
+...
+const fr = new FileReader()
+fr.onload = () => {
+  if (!fr.result) {
+    return
+  }
+  webpData = fr.result as Uint8Array
+  const result = await decodeRGBA(webpData)
+  // draw imageData
+  ...
+}
+// webp file
+fr.readAsArrayBuffer(file)
+...
+```
+
+#### DecodedWebPAnimationFrame
+
+The object have the following properties:
+
+- DecodedWebPAnimationFrame.width: `number`
+
+The frame image width.
+
+- DecodedWebPAnimationFrame.height: `number`
+
+The frame image height.
+
+- DecodedWebPAnimationFrame.duration: `number`
+
+The frame display duration.
+
+- DecodedWebPAnimationFrame.data: `Uint8Array`
+
+Raw data in pixels.
+
 #### WebPDecodedImageData
 
 The object have the following properties:
 
-- WebPDecodedImageData.width: number
+- WebPDecodedImageData.width: `number`
 
 The image width in pixels.
 
-- WebPDecodedImageData.height: number
+- WebPDecodedImageData.height: `number`
 
 The image height in pixels.
 
-- WebPDecodedImageData.data: Uint8Array
+- WebPDecodedImageData.data: `Uint8Array`
 
 Raw data in pixels.
 
@@ -228,7 +273,7 @@ Raw data in pixels.
 ## Playing Examples
 
 ```shell
-npm run dev
+npm run build-wasm:dev && npm run dev
 ```
 
 ## Building

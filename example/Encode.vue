@@ -42,7 +42,7 @@ const downloadWebp = async () => {
   //   buf[j] = pixel
   //   j++
   // })
-	const result = await encode(imgData as unknown as Uint8Array, canvas.width, canvas.height, true, { lossless: 1, quality: 100 })
+	const result = await encode((imgData.data) as unknown as Uint8Array, canvas.width, canvas.height, true, { lossless: 1, quality: 100 })
 	const blob = new Blob([result!], {type: 'image/webp'})
 	const blobURL = URL.createObjectURL(blob);
 	const a = document.createElement('a')
