@@ -99,7 +99,7 @@ describe('encode', () => {
       ctx.fill()
       frames.push({
         data: ctx.getImageData(0, 0, 100, 100).data,
-        duration: 20
+        duration: 1000
       })
     }
     const webpData = await encodeAnimation(100, 100, true, frames)

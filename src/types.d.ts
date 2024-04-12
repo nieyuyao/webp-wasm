@@ -8,6 +8,11 @@ export interface WebPAnimationFrame {
 	duration: number
 }
 
+export interface DecodedWebPAnimationFrame extends WebPAnimationFrame {
+  width: number
+  height: number
+}
+
 export interface WebPDecodedImageData {
   width: number
   height: number

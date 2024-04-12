@@ -5,7 +5,7 @@ import { encodeAnimation } from '../src/'
 let rafId = 0
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-let duration = 20 // ms
+const duration = 1000 // ms
 let delta = 0
 let lastTime = Date.now()
 let frames: any[] = []
@@ -22,13 +22,14 @@ const drawBall = (x = 0) => {
 		stop()
 		return
 	}
+  const now = Date.now()
 	if (delta <= duration) {
-		const now = Date.now()
 		delta += now - lastTime
-		lastTime = now
+    lastTime = now
 		rafId = requestAnimationFrame(() => drawBall(x))
 		return
 	}
+  lastTime = now
 	const ctx = canvasRef.value.getContext('2d')!
 	ctx.clearRect(0, 0, 100, 100)
 	ctx.fillStyle = 'red'
@@ -37,9 +38,10 @@ const drawBall = (x = 0) => {
 	ctx.closePath()
 	ctx.fill()
 	x += 10
+  delta = 0
 	frames.push({
 		data: ctx.getImageData(0, 0, 100, 100).data,
-		duration: 20
+		duration
 	})
 	rafId = requestAnimationFrame(() => drawBall(x))
 }

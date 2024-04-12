@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { decoderVersion, decodeRGBA } from '../src/'
+import { decoderVersion, decodeAnimation } from '../src/'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 let isUploaded = false
 let webpData: Uint8Array | null = null
+let timeoutId = 0
 const onChange = (event) => {
 	const files = (event.target as HTMLInputElement).files
 	if (!files?.length) {
@@ -27,21 +28,30 @@ const drawWebp = async () => {
 		alert('Please upload one webp image')
 		return
 	}
+  window.clearTimeout(timeoutId)
 	const canvas = canvasRef.value
 	if (!canvas || !webpData) {
 		return
 	}
-	const result = await decodeRGBA(webpData)
-  if (!result) {
+	const frames = await decodeAnimation(webpData, true)
+  if (!frames?.length) {
     return
   }
-	const ctx = canvas.getContext('2d')!
-	ctx.clearRect(0, 0, canvas.width, canvas.height)
-	canvas.style.width = `${result.width}px`
-	canvas.style.height = `${result.height}px`
-	canvas.width = result.width
-	canvas.height = result.height
-	ctx.putImageData(new ImageData(new Uint8ClampedArray(result.data), result.width), 0, 0)
+  const { width, height } = frames[0]
+  canvas.style.width = `${width}px`
+  canvas.style.height = `${height}px`
+  canvas.width = width
+  canvas.height = height
+  const ctx = canvas.getContext('2d')!
+  const loopFrame = (i: number) => {
+    const frame = frames[i]
+    ctx.putImageData(new ImageData(new Uint8ClampedArray(frame.data), frame.width), 0, 0)
+    timeoutId = window.setTimeout(() => {
+      loopFrame((i + 1) % frames.length)
+    }, frame.duration)
+  }
+
+  loopFrame(0)
 }
 
 onMounted(async () => {
@@ -49,6 +59,7 @@ onMounted(async () => {
 })
 onMounted(() => {
 	webpData = null
+  window.clearTimeout(timeoutId)
 })
 </script>
 
