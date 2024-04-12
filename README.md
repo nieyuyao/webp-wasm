@@ -236,19 +236,19 @@ fr.readAsArrayBuffer(file)
 
 The object have the following properties:
 
-- DecodedWebPAnimationFrame.width: number
+- DecodedWebPAnimationFrame.width: `number`
 
 The frame image width.
 
-- DecodedWebPAnimationFrame.height: number
+- DecodedWebPAnimationFrame.height: `number`
 
 The frame image height.
 
-- DecodedWebPAnimationFrame.duration: number
+- DecodedWebPAnimationFrame.duration: `number`
 
 The frame display duration.
 
-- DecodedWebPAnimationFrame.duration: data
+- DecodedWebPAnimationFrame.data: `Uint8Array`
 
 Raw data in pixels.
 
@@ -256,15 +256,15 @@ Raw data in pixels.
 
 The object have the following properties:
 
-- WebPDecodedImageData.width: number
+- WebPDecodedImageData.width: `number`
 
 The image width in pixels.
 
-- WebPDecodedImageData.height: number
+- WebPDecodedImageData.height: `number`
 
 The image height in pixels.
 
-- WebPDecodedImageData.data: Uint8Array
+- WebPDecodedImageData.data: `Uint8Array`
 
 Raw data in pixels.
 
