@@ -1,6 +1,6 @@
 # webp.wasm
 
-webp.wasm is a pure Webassembly / Javascript port of libwebp. The library supports encoding animated webp.
+webp.wasm is a pure Webassembly / Javascript port of libwebp. The library supports encoding animated WebP.
 
 ![CI](https://github.com/nieyuyao/webp-wasm/workflows/CI/badge.svg)
 ![latest tag](https://badgen.net/github/release/nieyuyao/webp-wasm)
