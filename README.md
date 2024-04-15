@@ -4,6 +4,13 @@ webp.wasm is a pure Webassembly / Javascript port of libwebp. The library suppor
 
 ![CI](https://github.com/nieyuyao/webp-wasm/workflows/CI/badge.svg)
 ![latest tag](https://badgen.net/github/release/nieyuyao/webp-wasm)
+![npm](https://img.shields.io/npm/v/wasm-webp.svg)
+
+## Usage
+
+```shell
+npm i wasm-webp
+```
 
 ## APIs
 
@@ -79,15 +86,15 @@ A more advanced API is based on the WebPConfig. <b>Only the lossless and quality
 
 `function encodeRGBA(data: Uint8Array, width: number, height: number, hasAlpha: boolean,config: Partial<WebPConfig>): Promise<Nullable<Uint8Array>>`
 
-- hasAlpha: boolean
+- hasAlpha: `boolean`
 
 Whether to include alpha chanel.
 
-- WebPConfig.lossless: number
+- WebPConfig.lossless: `number`
 
 Lossless encoding (0=lossy(default), 1=lossless).
 
-- WebPConfig.quality: number
+- WebPConfig.quality: `number`
 
 Between 0 and 100. Default value is 100.
 
@@ -108,17 +115,17 @@ Returns animated WebP like `GIF`.
 
 `function encodeAnimation(width: number, height: number, hasAlpha: boolean, frames: WebPAnimationFrame[]): Promise<Nullable<Uint8Array>>`
 
-- hasAlpha: boolean
+- hasAlpha: `boolean`
 
 Whether to include alpha chanel.
 
 The WebPAnimationFrame has follow properties:
 
-- WebPAnimationFrame.data: Uint8Array
+- WebPAnimationFrame.data: `Uint8Array`
 
 Frame bitmap.
 
-- WebPAnimationFrame.duration: number
+- WebPAnimationFrame.duration: `number`
 
 Duration of frame.
 
