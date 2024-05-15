@@ -6,7 +6,7 @@ webp.wasm is a pure Webassembly / Javascript port of libwebp. The library suppor
 ![latest tag](https://badgen.net/github/release/nieyuyao/webp-wasm)
 ![npm](https://img.shields.io/npm/v/wasm-webp.svg)
 
-## Usage
+## Install
 
 ```shell
 npm i wasm-webp

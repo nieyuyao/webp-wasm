@@ -38,3 +38,4 @@ export declare const decodeAnimation: (
   data: Uint8Array,
   hasAlpha: boolean
 ) => Promise<Nullable<DecodedWebPAnimationFrame[]>>
+export type * from './types'
