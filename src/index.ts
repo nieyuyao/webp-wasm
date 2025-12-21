@@ -1,5 +1,6 @@
 import type {
   WebPConfig,
+  WebPAnimationOptions,
   Nullable,
   WebPAnimationFrame,
   WebPDecodedImageData,
@@ -58,11 +59,21 @@ export const encode = async (
   return module.encode(data, width, height, hasAlpha, webpConfig)
 }
 
+const defaultAnimationOptions: Required<WebPAnimationOptions> = {
+  minimize_size: false,
+  kmin: 0,
+  kmax: 0,
+  allow_mixed: false,
+  loop_count: 0,
+  bgcolor: 0x00000000,
+}
+
 export const encodeAnimation = async (
   width: number,
   height: number,
   hasAlpha: boolean,
-  frames: WebPAnimationFrame[]
+  frames: WebPAnimationFrame[],
+  options?: WebPAnimationOptions
 ): Promise<Nullable<Uint8Array>> => {
   const module = await Module()
   const durations: number[] = []
@@ -77,7 +88,38 @@ export const encodeAnimation = async (
     offset += frame.data.length
     durations.push(frame.duration)
   })
-  return module.encodeAnimation(width, height, hasAlpha, durations, data)
+
+  if (!options) {
+    return module.encodeAnimation(width, height, hasAlpha, durations, data)
+  }
+
+  const animOptions = {
+    ...defaultAnimationOptions,
+    ...options,
+    minimize_size: options.minimize_size ? 1 : 0,
+    allow_mixed: options.allow_mixed ? 1 : 0,
+  }
+
+  const frameConfigs = frames.map((frame) => {
+    if (!frame.config) {
+      return { lossless: 0, quality: 100, use_default: 1 }
+    }
+    return {
+      lossless: Math.min(1, Math.max(0, frame.config.lossless ?? 0)),
+      quality: Math.min(100, Math.max(0, frame.config.quality ?? 100)),
+      use_default: 0,
+    }
+  })
+
+  return module.encodeAnimationEx(
+    width,
+    height,
+    hasAlpha,
+    durations,
+    frameConfigs,
+    data,
+    animOptions
+  )
 }
 
 export const decoderVersion = async (): Promise<string> => {
