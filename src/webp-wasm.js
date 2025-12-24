@@ -2572,6 +2572,12 @@ function dbg(...args) {
       return Emval.toHandle(handle[key]);
     };
 
+  var __emval_instanceof = (object, constructor) => {
+      object = Emval.toValue(object);
+      constructor = Emval.toValue(constructor);
+      return object instanceof constructor;
+    };
+
   var __emval_new_array = () => Emval.toHandle([]);
 
   
@@ -2803,6 +2809,8 @@ var wasmImports = {
   _emval_get_method_caller: __emval_get_method_caller,
   /** @export */
   _emval_get_property: __emval_get_property,
+  /** @export */
+  _emval_instanceof: __emval_instanceof,
   /** @export */
   _emval_new_array: __emval_new_array,
   /** @export */
