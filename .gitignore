@@ -7,3 +7,14 @@ wasm
 *.tmp
 .npmrc
 .idea
+
+# libwebp build artifacts
+libwebp/*.js
+libwebp/*.wasm
+libwebp/*.a
+libwebp/Makefile
+libwebp/CMakeCache.txt
+libwebp/CMakeFiles/
+libwebp/cmake_install.cmake
+libwebp/WebPConfig.cmake
+libwebp/WebPConfigVersion.cmake

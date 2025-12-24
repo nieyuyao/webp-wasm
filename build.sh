@@ -1,3 +1,11 @@
+#!/bin/bash
+
+if [ -z "$EMSDK" ]; then
+    echo "Error: EMSDK environment not set."
+    echo "Run: source /path/to/emsdk_env.sh"
+    exit 1
+fi
+
 DIST_DIR="./dist"
 WASM_OUT_DIR="./dist/cjs"
 EXPORT_ES6=0

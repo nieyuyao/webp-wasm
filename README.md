@@ -285,6 +285,81 @@ npm run build-wasm:dev && npm run dev
 
 ## Building
 
+### Prerequisites
+
+- **Emscripten SDK 3.1.56+**: Required for compiling C++ to WebAssembly
+- **Node.js 18+**
+- **CMake 3.16+**
+
+### Build Steps
+
 ```shell
+# Set up Emscripten environment (required)
+source /path/to/emsdk_env.sh
+
+# Install dependencies
+npm install
+
+# Build
 npm run build
+```
+
+### Vendored Dependencies
+
+This project includes `libwebp v1.3.2` as vendored source code (not a git submodule).
+
+To upgrade libwebp:
+1. Download new version from https://github.com/webmproject/libwebp
+2. Replace the `libwebp/` directory
+3. Remove `.git` directory if present
+4. Run build and tests
+
+## Integration Guide
+
+### Local Development (npm link)
+
+For local development, you can link this library to your project:
+
+```shell
+# In webp-wasm directory
+npm link
+
+# In your project directory
+npm link wasm-webp
+```
+
+### Vite Configuration
+
+When using with Vite, add the following configuration:
+
+```typescript
+// vite.config.ts
+import wasm from 'vite-plugin-wasm'
+import topLevelAwait from 'vite-plugin-top-level-await'
+
+export default defineConfig({
+  plugins: [
+    wasm(),
+    topLevelAwait(),
+  ],
+  worker: {
+    format: 'es',
+    plugins: () => [
+      wasm(),
+      topLevelAwait(),
+    ],
+  },
+  optimizeDeps: {
+    exclude: ['wasm-webp'],
+  },
+  // For npm link support
+  server: {
+    fs: {
+      allow: [
+        // Add the path to linked wasm-webp
+        '/path/to/webp-wasm',
+      ],
+    },
+  },
+})
 ```
