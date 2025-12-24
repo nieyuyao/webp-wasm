@@ -304,15 +304,27 @@ npm install
 npm run build
 ```
 
-### Vendored Dependencies
+### Dependencies
 
-This project includes `libwebp v1.3.2` as vendored source code (not a git submodule).
+This project uses `libwebp` as a git submodule from https://chromium.googlesource.com/webm/libwebp
+
+```shell
+# Clone with submodules
+git clone --recursive <repository-url>
+
+# Or initialize submodules after clone
+git submodule update --init --recursive
+```
 
 To upgrade libwebp:
-1. Download new version from https://github.com/webmproject/libwebp
-2. Replace the `libwebp/` directory
-3. Remove `.git` directory if present
-4. Run build and tests
+```shell
+cd libwebp
+git fetch --tags
+git checkout v1.4.0  # or desired version
+cd ..
+git add libwebp
+git commit -m "chore: upgrade libwebp to v1.4.0"
+```
 
 ## Integration Guide
 
