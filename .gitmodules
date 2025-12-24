@@ -1,3 +1,6 @@
 [submodule "libwebp"]
 	path = libwebp
 	url = https://chromium.googlesource.com/webm/libwebp
+[submodule "emsdk"]
+	path = emsdk
+	url = https://github.com/emscripten-core/emsdk.git

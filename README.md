@@ -287,43 +287,53 @@ npm run build-wasm:dev && npm run dev
 
 ### Prerequisites
 
-- **Emscripten SDK 3.1.56+**: Required for compiling C++ to WebAssembly
 - **Node.js 18+**
 - **CMake 3.16+**
 
 ### Build Steps
 
 ```shell
-# Set up Emscripten environment (required)
-source /path/to/emsdk_env.sh
+# Clone with submodules
+git clone --recursive <repository-url>
+cd webp-wasm
 
 # Install dependencies
 npm install
 
-# Build
+# Build (automatically installs emsdk if needed)
+npm run build
+```
+
+If you have a system-wide emsdk installation, you can use it instead:
+```shell
+source /path/to/emsdk_env.sh
 npm run build
 ```
 
 ### Dependencies
 
-This project uses `libwebp` as a git submodule from https://chromium.googlesource.com/webm/libwebp
+This project uses git submodules:
+
+| Submodule | Version | Source |
+|-----------|---------|--------|
+| libwebp | v1.3.2 | https://chromium.googlesource.com/webm/libwebp |
+| emsdk | 3.1.74 | https://github.com/emscripten-core/emsdk |
 
 ```shell
-# Clone with submodules
-git clone --recursive <repository-url>
-
-# Or initialize submodules after clone
+# Initialize submodules after clone
 git submodule update --init --recursive
 ```
 
-To upgrade libwebp:
+To upgrade dependencies:
 ```shell
-cd libwebp
-git fetch --tags
-git checkout v1.4.0  # or desired version
-cd ..
-git add libwebp
-git commit -m "chore: upgrade libwebp to v1.4.0"
+# Upgrade libwebp
+cd libwebp && git fetch --tags && git checkout v1.4.0 && cd ..
+git add libwebp && git commit -m "chore: upgrade libwebp to v1.4.0"
+
+# Upgrade emsdk
+cd emsdk && git fetch --tags && git checkout 3.1.75 && cd ..
+git add emsdk && git commit -m "chore: upgrade emsdk to 3.1.75"
+# Note: Update EMSDK_VERSION in build.sh accordingly
 ```
 
 ## Integration Guide

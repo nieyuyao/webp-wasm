@@ -1,7 +1,8 @@
 SRC = webp
 CODEC_DIR = libwebp
 
-EMSDK_PATH ?= $(EMSDK)
+# Use EMSDK env var if set, otherwise use local submodule
+EMSDK_PATH ?= $(if $(EMSDK),$(EMSDK),./emsdk)
 EMSDK_INCLUDE_DIR = $(EMSDK_PATH)/upstream/emscripten/cache/sysroot/include
 EMCC = $(EMSDK_PATH)/upstream/emscripten/emcc
 EMPP = $(EMSDK_PATH)/upstream/emscripten/em++
