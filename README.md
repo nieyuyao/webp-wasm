@@ -113,13 +113,19 @@ const webpData = await encode(imgData.data, canvas.width, canvas.height, true, {
 
 Returns animated WebP like `GIF`.
 
-`function encodeAnimation(width: number, height: number, hasAlpha: boolean, frames: WebPAnimationFrame[]): Promise<Nullable<Uint8Array>>`
+`function encodeAnimation(width: number, height: number, hasAlpha: boolean, frames: WebPAnimationFrame[], options?: WebPAnimationOptions): Promise<Nullable<Uint8Array>>`
 
 - hasAlpha: `boolean`
 
-Whether to include alpha chanel.
+Whether to include alpha channel.
 
-The WebPAnimationFrame has follow properties:
+- options: `WebPAnimationOptions` (optional)
+
+Extended animation encoding options.
+
+#### WebPAnimationFrame
+
+The WebPAnimationFrame has the following properties:
 
 - WebPAnimationFrame.data: `Uint8Array`
 
@@ -127,9 +133,53 @@ Frame bitmap.
 
 - WebPAnimationFrame.duration: `number`
 
-Duration of frame.
+Duration of frame in milliseconds.
 
-##### Example
+- WebPAnimationFrame.config: `WebPFrameConfig` (optional)
+
+Per-frame encoding configuration.
+
+#### WebPFrameConfig
+
+Per-frame encoding settings:
+
+- WebPFrameConfig.lossless: `number` (optional)
+
+Lossless encoding (0=lossy(default), 1=lossless).
+
+- WebPFrameConfig.quality: `number` (optional)
+
+Between 0 and 100. Default value is 100.
+
+#### WebPAnimationOptions
+
+Global animation encoding options:
+
+- WebPAnimationOptions.minimize_size: `boolean` (optional)
+
+If true, minimize output size. Default is false.
+
+- WebPAnimationOptions.kmin: `number` (optional)
+
+Minimum keyframe interval. Default is 0 (auto).
+
+- WebPAnimationOptions.kmax: `number` (optional)
+
+Maximum keyframe interval. Default is 0 (auto).
+
+- WebPAnimationOptions.allow_mixed: `boolean` (optional)
+
+If true, allow mixing lossy and lossless frames. Default is false.
+
+- WebPAnimationOptions.loop_count: `number` (optional)
+
+Number of times to loop the animation. 0 means infinite. Default is 0.
+
+- WebPAnimationOptions.bgcolor: `number` (optional)
+
+Background color in ARGB format. Default is 0x00000000 (transparent).
+
+##### Example (Basic)
 
 ```javascript
 ...
@@ -141,6 +191,50 @@ frames.push({
 const webpData = await encodeAnimation(100, 100, true, frames)
 ...
 // download webp
+```
+
+##### Example (With Animation Options)
+
+```javascript
+...
+const frames = [
+  { data: ctx.getImageData(0, 0, 100, 100).data, duration: 100 },
+  { data: ctx.getImageData(0, 0, 100, 100).data, duration: 100 },
+]
+
+// Create animation with custom options
+const webpData = await encodeAnimation(100, 100, true, frames, {
+  loop_count: 3,           // Loop 3 times (0 = infinite)
+  bgcolor: 0xFFFFFFFF,     // White background (ARGB)
+  minimize_size: true,     // Optimize for smaller file size
+  allow_mixed: true,       // Allow mixing lossy/lossless frames
+})
+...
+```
+
+##### Example (With Per-Frame Quality)
+
+```javascript
+...
+const frames = [
+  // High quality keyframe
+  {
+    data: ctx.getImageData(0, 0, 100, 100).data,
+    duration: 100,
+    config: { lossless: 1, quality: 100 }
+  },
+  // Lower quality for smaller size
+  {
+    data: ctx.getImageData(0, 0, 100, 100).data,
+    duration: 100,
+    config: { lossless: 0, quality: 75 }
+  },
+]
+
+const webpData = await encodeAnimation(100, 100, true, frames, {
+  allow_mixed: true,  // Required for mixing lossless/lossy frames
+})
+...
 ```
 
 ### Decode
