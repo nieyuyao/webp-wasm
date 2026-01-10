@@ -3,7 +3,7 @@ import fs from 'fs'
 import url from 'url'
 import { createCanvas, Image } from '@napi-rs/canvas'
 import { encoderVersion, encodeRGB, encodeRGBA, encode, encodeAnimation } from '../dist/esm'
-import { matchBuffer } from './utils'
+import { matchBuffer, getLoopCount } from './utils'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 
@@ -107,4 +107,55 @@ describe('encode', () => {
 			matchBuffer(webpData, fs.readFileSync(path.resolve(__dirname, './fixtures/running-ball.webp')))
 		).toBeTruthy()
 	})
+
+  test('encode animated webp with loop_count=0 (infinite)', async () => {
+    const canvas = createCanvas(50, 50)
+    const ctx = canvas.getContext('2d')
+    const frames = []
+    for (let i = 0; i < 3; i++) {
+      ctx.fillStyle = ['red', 'green', 'blue'][i]
+      ctx.fillRect(0, 0, 50, 50)
+      frames.push({
+        data: ctx.getImageData(0, 0, 50, 50).data,
+        duration: 100
+      })
+    }
+    const webpData = await encodeAnimation(50, 50, true, frames, { loop_count: 0 })
+    expect(webpData).not.toBeNull()
+    expect(getLoopCount(webpData)).toBe(0)
+  })
+
+  test('encode animated webp with loop_count=3', async () => {
+    const canvas = createCanvas(50, 50)
+    const ctx = canvas.getContext('2d')
+    const frames = []
+    for (let i = 0; i < 3; i++) {
+      ctx.fillStyle = ['red', 'green', 'blue'][i]
+      ctx.fillRect(0, 0, 50, 50)
+      frames.push({
+        data: ctx.getImageData(0, 0, 50, 50).data,
+        duration: 100
+      })
+    }
+    const webpData = await encodeAnimation(50, 50, true, frames, { loop_count: 3 })
+    expect(webpData).not.toBeNull()
+    expect(getLoopCount(webpData)).toBe(3)
+  })
+
+  test('encode animated webp with loop_count=1 (play once)', async () => {
+    const canvas = createCanvas(50, 50)
+    const ctx = canvas.getContext('2d')
+    const frames = []
+    for (let i = 0; i < 2; i++) {
+      ctx.fillStyle = i === 0 ? 'white' : 'black'
+      ctx.fillRect(0, 0, 50, 50)
+      frames.push({
+        data: ctx.getImageData(0, 0, 50, 50).data,
+        duration: 500
+      })
+    }
+    const webpData = await encodeAnimation(50, 50, true, frames, { loop_count: 1 })
+    expect(webpData).not.toBeNull()
+    expect(getLoopCount(webpData)).toBe(1)
+  })
 })

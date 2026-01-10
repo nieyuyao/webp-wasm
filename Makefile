@@ -1,11 +1,17 @@
 SRC = webp
 CODEC_DIR = libwebp
-EMSDK_INCLUDE_DIR = emsdk/upstream/emscripten/cache/sysroot/include
+
+# Use EMSDK env var if set, otherwise use local submodule
+EMSDK_PATH ?= $(if $(EMSDK),$(EMSDK),./emsdk)
+EMSDK_INCLUDE_DIR = $(EMSDK_PATH)/upstream/emscripten/cache/sysroot/include
+EMCC = $(EMSDK_PATH)/upstream/emscripten/emcc
+EMPP = $(EMSDK_PATH)/upstream/emscripten/em++
+EMCMAKE = $(EMSDK_PATH)/upstream/emscripten/emcmake
 
 .PHONY: clean
 
 webp-wasm.js: webp.o decode.o encode.o version.o ${CODEC_DIR}/libwebp.a ${CODEC_DIR}/libsharpyuv.a ${CODEC_DIR}/libwebpmux.a ${CODEC_DIR}/libwebpdemux.a
-	emsdk/upstream/emscripten/emcc \
+	$(EMCC) \
 		-lembind \
 		-s EXPORT_ES6=$(EXPORT_ES6) \
 		-s MODULARIZE \
@@ -15,7 +21,7 @@ webp-wasm.js: webp.o decode.o encode.o version.o ${CODEC_DIR}/libwebp.a ${CODEC_
 		-v
 
 %.o: ${SRC}/%.cpp
-	emsdk/upstream/emscripten/em++ -c \
+	$(EMPP) -c \
 	-std=c++17 \
 	-I ${CODEC_DIR} \
 	-I ${EMSDK_INCLUDE_DIR} \
@@ -27,7 +33,7 @@ webp-wasm.js: webp.o decode.o encode.o version.o ${CODEC_DIR}/libwebp.a ${CODEC_
 	$(MAKE) -C $(@D)
 
 $(CODEC_DIR)/Makefile: ${CODEC_DIR}/CMakeLists.txt
-	emsdk/upstream/emscripten/emcmake cmake \
+	$(EMCMAKE) cmake \
 		-DCMAKE_DISABLE_FIND_PACKAGE_Threads=1 \
 		-DWEBP_BUILD_CWEBP=ON \
 		-DWEBP_BUILD_DWEBP=ON \
