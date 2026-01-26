@@ -5,6 +5,12 @@
 using namespace emscripten;
 thread_local val Uint8Array = val::global("Uint8Array");
 
+void applyPicConfig(WebPConfig& webp_config, const SimpleWebPConfig& config)
+{
+	webp_config.quality = config.quality;
+	webp_config.lossless = config.lossless;
+}
+
 val encoder_version()
 {
 	return get_version(WebPGetEncoderVersion());
@@ -26,9 +32,7 @@ val encode(std::string data, int width, int height, bool has_alpha, SimpleWebPCo
 {
 	WebPConfig webp_config;
 	WebPConfigInit(&webp_config);
-
-	webp_config.quality = config.quality;
-	webp_config.lossless = config.lossless;
+	applyPicConfig(webp_config, config);
 
 	WebPMemoryWriter wrt;
 	WebPMemoryWriterInit(&wrt);
@@ -76,8 +80,7 @@ val encodeAnimation(int width, int height, bool has_alpha, std::vector<WebPAnima
 		WebPConfigInit(&config);
 		if (frame.has_config)
 		{
-			config.quality = frame.config.quality;
-			config.lossless = frame.config.lossless;
+			applyPicConfig(config, frame.config);
 		}
 
 		WebPPicture pic;
