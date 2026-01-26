@@ -10,6 +10,14 @@ EMSCRIPTEN_BINDINGS(module)
 		.field("lossless", &SimpleWebPConfig::lossless)
 		.field("quality", &SimpleWebPConfig::quality);
 
+	emscripten::value_object<WebPAnimationFrame>("WebPAnimationFrame")
+		.field("duration", &WebPAnimationFrame::duration)
+		.field("data", &WebPAnimationFrame::data)
+		.field("config", &WebPAnimationFrame::config)
+		.field("has_config", &WebPAnimationFrame::has_config);
+
+	emscripten::register_vector<WebPAnimationFrame>("VectorWebPAnimationFrame");
+
 	function("encoder_version", &encoder_version);
 	function("encodeRGB", &encodeRGB);
 	function("encodeRGBA", &encodeRGBA);

@@ -63,36 +63,37 @@ val encode(std::string data, int width, int height, bool has_alpha, SimpleWebPCo
 	return encoded_data;
 }
 
-val encodeAnimation(int width, int height, bool has_alpha, val durations, std::string data)
+val encodeAnimation(int width, int height, bool has_alpha, std::vector<WebPAnimationFrame> frames)
 {
 	WebPAnimEncoderOptions enc_options;
 	WebPAnimEncoderOptionsInit(&enc_options);
 	WebPAnimEncoder* enc = WebPAnimEncoderNew(width, height, &enc_options);
-	auto frame_durations = vecFromJSArray<int>(durations);
-	int frames = frame_durations.size();
-	int frame_data_size = (has_alpha ? 4 : 3) * width * height;
 	int stride = (has_alpha ? 4 : 3) * width;
-  int timestamp = 0;
-	for (int i = 0; i < frames; i++)
+	int timestamp = 0;
+	for (const auto& frame : frames)
 	{
 		WebPConfig config;
 		WebPConfigInit(&config);
+		if (frame.has_config)
+		{
+			config.quality = frame.config.quality;
+			config.lossless = frame.config.lossless;
+		}
+
 		WebPPicture pic;
 		if (!WebPPictureInit(&pic))
 		{
 			WebPPictureFree(&pic);
 			return val::null();
 		}
-		auto pos = i * frame_data_size;
-		auto pic_data = data.substr(pos, frame_data_size);
 		pic.use_argb = 1;
 		pic.width = width;
 		pic.height = height;
 		has_alpha
-			? WebPPictureImportRGBA(&pic, (uint8_t*)pic_data.c_str(), stride)
-			: WebPPictureImportRGB(&pic, (uint8_t*)pic_data.c_str(), stride);
+			? WebPPictureImportRGBA(&pic, (uint8_t*)frame.data.c_str(), stride)
+			: WebPPictureImportRGB(&pic, (uint8_t*)frame.data.c_str(), stride);
 		int success = WebPAnimEncoderAdd(enc, &pic, timestamp, &config);
-    timestamp = timestamp + frame_durations[i];
+		timestamp = timestamp + frame.duration;
 		if (!success) {
 			return val::null();
 		}

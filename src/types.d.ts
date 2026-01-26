@@ -6,6 +6,7 @@ export interface WebPConfig {
 export interface WebPAnimationFrame {
 	data: Uint8Array
 	duration: number
+	config?: WebPConfig
 }
 
 export interface DecodedWebPAnimationFrame extends WebPAnimationFrame {
