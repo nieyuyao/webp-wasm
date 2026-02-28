@@ -129,6 +129,10 @@ Frame bitmap.
 
 Duration of frame.
 
+- WebPAnimationFrame.config: `WebPConfig` (optional)
+
+Per-frame encoding configuration. If not provided, default config is used (lossless: 0, quality: 100).
+
 ##### Example
 
 ```javascript
@@ -137,6 +141,12 @@ Duration of frame.
 frames.push({
   data: ctx.getImageData(0, 0, 100, 100).data,
   duration: 20
+})
+// with per-frame config
+frames.push({
+  data: ctx.getImageData(0, 0, 100, 100).data,
+  duration: 20,
+  config: { lossless: 0, quality: 80 }
 })
 const webpData = await encodeAnimation(100, 100, true, frames)
 ...

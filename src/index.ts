@@ -65,19 +65,23 @@ export const encodeAnimation = async (
   frames: WebPAnimationFrame[]
 ): Promise<Nullable<Uint8Array>> => {
   const module = await Module()
-  const durations: number[] = []
-  const dataLength = frames.reduce((acc, frame) => {
-    acc += frame.data.length
-    return acc
-  }, 0)
-  const data: Uint8Array = new Uint8Array(dataLength)
-  let offset = 0
+  const frameVector = new module.VectorWebPAnimationFrame()
   frames.forEach((frame) => {
-    data.set(frame.data, offset)
-    offset += frame.data.length
-    durations.push(frame.duration)
+    const hasConfig = frame.config !== undefined
+    const config = {
+      ...defaultWebpConfig,
+      ...frame.config,
+    }
+    config.lossless = Math.min(1, Math.max(0, config.lossless))
+    config.quality = Math.min(100, Math.max(0, config.quality))
+    frameVector.push_back({
+      duration: frame.duration,
+      data: frame.data,
+      config,
+      has_config: hasConfig,
+    })
   })
-  return module.encodeAnimation(width, height, hasAlpha, durations, data)
+  return module.encodeAnimation(width, height, hasAlpha, frameVector)
 }
 
 export const decoderVersion = async (): Promise<string> => {
