@@ -39,4 +39,4 @@ jobs:
       - name: release
         run: npm run release
         env:
-          NPM_AUTH_TOKEN: ${{ vars.NPM_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
